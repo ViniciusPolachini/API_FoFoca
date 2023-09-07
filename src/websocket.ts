@@ -1,6 +1,61 @@
 import { io } from './http';
 
+interface RoomUser {
+    socket_id: string,
+    username: string,
+    room: string,
+}
+
 interface Message {
+    room: string,
+    text: string,
+    createdAt: Date,
+    username: string
+}
+
+const users: RoomUser[] = [];
+
+const message: Message[] = [];
+
+io.on("connection", (socket) => {
+    socket.on("select_room", (data, callback) => {
+        socket.join(data.room);
+
+        const userInRoom = users.find(
+            (user) => userAlredyInRoom(user, data)
+        );
+
+        if (userInRoom){
+            userInRoom.socket_id = socket.id;
+        } else {
+            users.push({
+                room: data.room,
+                username: data.username,
+                socket_id: data.socket_id
+            });
+        }
+    });
+
+    socket.on("message", data => {
+        const message: Message = {
+            room: data.room,
+            username: data.username,
+            text: data.message,
+            createdAt: new Date()
+        }
+    });
+});
+
+
+
+//#region utilitarios
+function  userAlredyInRoom(user ,data){
+    return user.username === data.username && user.room === data.room
+}
+
+//#endregion
+
+/* interface Message {
     sender: string,
     message: string 
 }
@@ -82,4 +137,4 @@ io.on("connection", (socket) => {
             socket.to(chat.id.toString()).emit("message", {message: data.message, chat_id: chat.id, sender: data.username});
         }
     })
-})
+}) */
