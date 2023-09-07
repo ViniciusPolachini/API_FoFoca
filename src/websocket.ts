@@ -15,7 +15,7 @@ interface Message {
 
 const users: RoomUser[] = [];
 
-const message: Message[] = [];
+const messages: Message[] = [];
 
 io.on("connection", (socket) => {
     socket.on("select_room", (data, callback) => {
@@ -34,6 +34,9 @@ io.on("connection", (socket) => {
                 socket_id: data.socket_id
             });
         }
+
+        const messagesRoom = getMessagesRoom(data.room);
+        callback(messagesRoom);
     });
 
     socket.on("message", data => {
@@ -43,15 +46,25 @@ io.on("connection", (socket) => {
             text: data.message,
             createdAt: new Date()
         }
+
+        messages.push(message);
+
+        io.to(data.room).emit("message", message);
     });
 });
 
 
 
 //#region utilitarios
-function  userAlredyInRoom(user ,data){
+function userAlredyInRoom(user: any ,data: any){
     return user.username === data.username && user.room === data.room
 }
+
+function getMessagesRoom(room: string){
+    const messagesRoom = messages.filter(message => message.room = room);
+    return messagesRoom;
+}
+
 
 //#endregion
 
