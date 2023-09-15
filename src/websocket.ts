@@ -19,6 +19,7 @@ const messages: Message[] = [];
 
 io.on("connection", (socket) => {
     socket.on("select_room", (data, callback) => {
+        console.log(data);
         socket.join(data.room);
 
         const userInRoom = users.find(
@@ -48,11 +49,10 @@ io.on("connection", (socket) => {
         }
 
         messages.push(message);
-
+        console.log(message);
         io.to(data.room).emit("message", message);
     });
 });
-
 
 
 //#region utilitarios
