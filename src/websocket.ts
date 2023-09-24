@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
         }
 
         messages.push(message);
-        console.log(message);
+        console.log(messages);
         io.to(data.room).emit("message", message);
     });
 });
@@ -63,6 +63,7 @@ function userAlredyInRoom(user: any ,data: any){
 function getMessagesRoom(room: string){
     const messagesRoom = messages.filter(message => message.room = room);
     console.log(messagesRoom)
+    console.log(messages)
     return messagesRoom;
 }
 
