@@ -51,6 +51,10 @@ io.on("connection", (socket) => {
 
         io.to(data.room).emit("message", message);
     });
+
+    socket.on("leave_room", (data)=> {
+        socket.leave(data.room);
+    });
 });
 
 
