@@ -62,6 +62,7 @@ function userAlredyInRoom(user: any ,data: any){
 
 function getMessagesRoom(room: string){
     const messagesRoom = messages.filter(message => message.room = room);
+    console.log(messagesRoom)
     return messagesRoom;
 }
 
