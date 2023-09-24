@@ -53,6 +53,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("leave_room", (data)=> {
+        console.log(data);
         socket.leave(data.room);
     });
 });
